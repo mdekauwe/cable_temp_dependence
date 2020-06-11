@@ -11,20 +11,6 @@ def xt3(k25, Tk, Ea, deltaS, Hd):
 
     return k25 * np.maximum(0.0, num / den)
 
-def xvcmxt3_acclim(k25, Tk, Ea, deltaS, Hd):
-    # Acclimated temperature response
-    # Kumarathunge et al., New. Phyt., 2019,
-    # Eq 7
-
-    RGAS = 8.31429958
-    TREFK = 25.0 + 273.15 #298.200012
-
-    coef = 1.0 + np.exp((deltaS * TREFK - Hd) / (RGAS * TREFK))
-    num = coef * np.exp((Ea / (RGAS * TREFK)) * (1. - TREFK / Tk))
-    den = 1.0 + np.exp((deltaS * Tk - Hd) / (RGAS * Tk))
-
-    return k25 * np.maximum(0.0, num / den)
-
 def arrh(k25, Ea, Tk):
     RGAS = 8.314
     return k25 * np.exp((Ea * (Tk - 298.15)) / (298.15 * RGAS * Tk))
@@ -37,13 +23,6 @@ def peaked_arrh(k25, Ea, Tk, deltaS, Hd):
 
     return arg1 * arg2 / arg3
 
-def peaked_arrh_acclim(k25, Ea, Tk, deltaS, Hd):
-    RGAS = 8.314
-    arg1 = arrh(k25, Ea, Tk)
-    arg2 = 1.0 + np.exp((298.15 * deltaS - Hd) / (298.15 * RGAS))
-    arg3 = 1.0 + np.exp((Tk * deltaS - Hd) / (Tk * RGAS))
-
-    return arg1 * arg2 / arg3
 
 
 kJ_to_J = 1000.0
@@ -63,8 +42,6 @@ Hdj = 152044.0
 
 Vcmax_cable = xt3(Vcmax25, TleafK, Eav, deltaSv, Hdv)
 Jmax_cable = xt3(Jmax25, TleafK, Eaj, deltaSj, Hdj)
-#Vcmax_acclim = xvcmxt3_acclim(Vcmax25, TleafK, Eav_acclim, deltaSv_acclim,
-#                              Hdv_acclim)
 
 
 # Eucalyptus tereticornis
